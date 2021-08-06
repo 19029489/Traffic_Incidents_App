@@ -67,8 +67,6 @@ public class MainActivity extends AppCompatActivity {
 
         lv.setAdapter(aa);
 
-        Toast.makeText(MainActivity.this, "" + Calendar.getInstance().get(Calendar.YEAR), Toast.LENGTH_SHORT).show();
-
         client.post("http://datamall2.mytransport.sg/ltaodataservice/TrafficIncidents", new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, JSONObject response) {
@@ -186,10 +184,29 @@ public class MainActivity extends AppCompatActivity {
                                             String dateMessage = message.substring(1);
                                             String [] dateString = dateMessage.split(Pattern.quote(")"));
                                             String [] timeString = dateString[1].split(Pattern.quote(" "));
+                                            String [] date2 = dateString[0].split(Pattern.quote("/"));
+
+                                            String day = "";
+
+                                            if (Integer.parseInt(date2[0]) < 10) {
+                                                day = "0" + date2[0];
+                                            } else {
+                                                day = date2[0];
+                                            }
+
+                                            String month = "";
+
+                                            if (Integer.parseInt(date2[1]) < 10) {
+                                                month = "0" + date2[1];
+                                            } else {
+                                                month = date2[1];
+                                            }
+
+                                            String dateUsed = day + "-" + month + "-" + Calendar.getInstance().get(Calendar.YEAR);
+
                                             try{
-                                                SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY HH:mm");
-                                                date = (format.parse(dateString[0] + " " + timeString[0]));
-                                                Log.i("date1223243342","" + date);
+                                                SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                                                date = (format.parse(  dateUsed + " " + timeString[0]));
 
                                             } catch (ParseException e){
                                                 e.printStackTrace();
@@ -197,7 +214,21 @@ public class MainActivity extends AppCompatActivity {
 
                                             Incident incident = new Incident(type, latitude, longitude, message, date);
 
-                                            al.add(incident);
+                                            colRef
+                                                    .add(incident)
+                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference documentReference) {
+                                                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+
+                                                        }
+                                                    })
+                                                    .addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            Log.w(TAG, "Error adding document", e);
+                                                        }
+                                                    });
                                         }
 
                                     }
@@ -209,23 +240,7 @@ public class MainActivity extends AppCompatActivity {
 
                             });
 
-//                            colRef
-//                                    .add(student)
-//                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                        @Override
-//                                        public void onSuccess(DocumentReference documentReference) {
-//                                            Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
-//
-//                                        }
-//                                    })
-//                                    .addOnFailureListener(new OnFailureListener() {
-//                                        @Override
-//                                        public void onFailure(@NonNull Exception e) {
-//                                            Log.w(TAG, "Error adding document", e);
-//                                        }
-//                                    });
-//
-//
+
                         }
 
                     })
