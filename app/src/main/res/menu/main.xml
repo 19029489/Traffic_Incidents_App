@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/viewAll"
+        android:title="View All Incidents"
+        android:icon="@drawable/ic_baseline_flag_24"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/upload"
+        android:title="Upload to Firebase"
+        android:icon="@drawable/ic_baseline_file_upload_24"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/refresh"
+        android:title="Refresh"
+        android:icon="@drawable/ic_baseline_refresh_24"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/graph"
+        android:title="Graph"
+        android:icon="@drawable/ic_baseline_table_chart_24"
+        app:showAsAction="always" />
+</menu>
